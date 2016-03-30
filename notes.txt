@@ -1,0 +1,11 @@
+Check-In Type:
+• Visited
+• Called
+• Sent Gift
+• Delivered Meal
+
+Visitee Categories:
+• Home-bound
+• Sick
+• Hospitalized
+• Help Needed
