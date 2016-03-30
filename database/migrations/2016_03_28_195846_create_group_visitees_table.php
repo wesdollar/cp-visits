@@ -27,6 +27,6 @@ class CreateGroupVisiteesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('group_visitees');
+        Schema::drop('group_visitee');
     }
 }
