@@ -28,8 +28,14 @@ class GroupsController extends Controller
         return view('groups.create', compact('usStates'));
     }
 
-    public function postCreate() {
-        return 'Create new groups';
+    public function postCreate(Request $request) {
+
+        $user = Auth::user();
+
+        $group = Group::create($request->all());
+        $user->groups()->attach($group->id);
+
+        return redirect('/groups')->with('success', 'Your group has been created!');
     }
 
     public function setDefaultGroup($groupId) {
