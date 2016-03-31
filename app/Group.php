@@ -13,6 +13,6 @@ class Group extends Model
     }
 
     public function visitees() {
-        return $this->belongsToMany('App\Visitee');
+        return $this->belongsToMany('App\Visitee')->withTimestamps();
     }
 }
