@@ -61,7 +61,7 @@ class GroupsController extends Controller
 
             UserSetting::create($data);
 
-            return redirect('/groups');
+            return redirect('/groups')->with('success', 'Your default group has been updated!');
         }
 
     }
