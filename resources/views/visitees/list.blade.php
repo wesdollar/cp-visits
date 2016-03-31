@@ -93,7 +93,7 @@
                                             <div class="col-md-6">
 
                                                 @if ($user->visits()->where('visitee_id', $visitee->id)->whereDate('created_at', '=', date('Y-m-d'))->first())
-                                                    <a href="#" class="btn btn-lg btn-success disabled">
+                                                    <a href="#" class="btn btn-lg btn-success disabled btn-block">
                                                         <span class="glyphicon glyphicon-ok"></span>
                                                         You Checked In!
                                                     </a>
