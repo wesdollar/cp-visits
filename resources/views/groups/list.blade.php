@@ -101,7 +101,7 @@
 
                                     @if (!$user->settings()->where('name', 'default_group')->first())
 
-                                        <a href="{{ url('groups/set-default/' . $group->id) }}" class="btn btn-lg btn-success">
+                                        <a href="{{ url('groups/set-default/' . $group->id) }}" class="btn btn-lg btn-success btn-block">
                                             Set as Default Group
                                         </a>
 
