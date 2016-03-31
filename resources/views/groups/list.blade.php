@@ -27,6 +27,30 @@
                     </a>
                 </p>
 
+                <p>
+                    <input type="text" id="search-input" class="form-control" placeholder="Search for Group to Join" />
+                    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+                    <script src="//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
+                    <script>
+                        var client = algoliasearch("LR7BM1EUM9", "88f9cf2ab4ea77179bf77285c7631fd9");
+                        var index = client.initIndex('groups');
+                        autocomplete('#search-input', {hint: false}, [
+                            {
+                                source: autocomplete.sources.hits(index, {hitsPerPage: 5}),
+                                displayKey: 'name',
+                                templates: {
+                                    suggestion: function(suggestion) {
+                                        return suggestion._highlightResult.name.value;
+                                    }
+                                }
+                            }
+                        ]).on('autocomplete:selected', function(event, suggestion, dataset) {
+                            // console.log(suggestion.id, dataset);
+                            window.location = '/groups/join/' + suggestion.id;
+                        });
+                    </script>
+                </p>
+
                 <h3>Your Groups</h3>
             </div>
         </div>
@@ -49,14 +73,14 @@
                     @foreach ($user->groups as $group)
                         <li class="list-group-item">
 
-                            <div class="container">
+                            <div class="row">
                                 <div class="col-md-6">
                                     <span style="font-size: 1.4em;">{{ $group->name }}<br></span>
 
                                     @if ($group->city != null || $group->state != null || $group->zip != null)
 
                                         <span class="text-muted">
-                                @if ($group->city != null && $group->state != null)
+                            @if ($group->city != null && $group->state != null)
                                                 {{ $group->city }}, {{ $group->state }}
                                             @elseif ($group->city != null && $group->state == null)
                                                 {{ $group->city }}
@@ -69,7 +93,7 @@
                                             @if ($group->zip != null)
                                                 {{ $group->zip }}
                                             @endif
-                                </span>
+                            </span>
 
                                     @endif
                                 </div>

@@ -160,6 +160,7 @@ return [
          * Third Party Service Providers
          * */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        AlgoliaSearch\Laravel\AlgoliaServiceProvider::class,
 
     ],
 

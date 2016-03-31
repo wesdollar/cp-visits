@@ -67,9 +67,17 @@ class GroupsController extends Controller
     }
 
     public function returnAllGroups() {
-        $groups = Group::where('active', true)->get(['name']);
 
-        return $groups;
+        // initial index
+        $groups = Group::all();
+
+        foreach ($groups as $group) {
+            $group->pushToIndex();
+        }
+
+        return 'Indexed!';
+
+//        return Group::setSettings();
     }
 
     public function joinGroup($groupId = null) {
@@ -78,7 +86,15 @@ class GroupsController extends Controller
 
         if ($groupId) {
 
-            $user->groups()->attach($groupId);
+            // if user is already attached to the provided group,
+            // do not attach a second time
+
+            if ($group = $user->groups()->find($groupId)) {
+                return redirect()->back()->with('success', 'You already belong to '.$group->name.'!');
+            }
+            else {
+                $user->groups()->attach($groupId);
+            }
 
             return redirect()->back()->with('success', 'You have been added to the group!');
 
