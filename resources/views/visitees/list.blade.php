@@ -21,7 +21,7 @@
                 <div class="col-md-12">
                     <div class="alert alert-info">
                         <p>None of your groups have any visitees. To get started, click below to add a visitee.</p>
-                        <p>
+                        <p class="top-margin">
                             <a href="{{ url('visitees/create') }}" class="btn btn-lg btn-success btn-block">
                                 Add a Visitee
                             </a>
