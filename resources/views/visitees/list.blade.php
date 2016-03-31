@@ -113,7 +113,7 @@
                                                 @endif
 
                                                     <a href="{{ url('visitees/'. $visitee->id . '/edit') }}" class="btn btn-lg btn-warning btn-block">
-                                                        <i class="fa fa-trash"></i>
+                                                        <i class="fa fa-pencil"></i>
                                                         Edit Details
                                                     </a>
 
