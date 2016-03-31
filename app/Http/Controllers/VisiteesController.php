@@ -39,7 +39,7 @@ class VisiteesController extends Controller
         $groups = $user->groups;
 
         // todo: refactor for easy reuse
-        $userDefaultGroup = ($user->settings->where('name', 'default_group')->first()->value) ? $user->settings->where('name', 'default_group')->first()->value : null;
+        $userDefaultGroup = (($user->settings->where('name', 'default_group')->first()->value) ? $user->settings->where('name', 'default_group')->first()->value : null);
 
         $usStates = UsState::all();
 
