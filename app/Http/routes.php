@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('groups/create', 'GroupsController@postCreate');
     Route::get('groups/set-default/{id}', 'GroupsController@setDefaultGroup');
     Route::get('/groups/join/{id?}', 'GroupsController@joinGroup');
+    Route::get('/groups/{id}/remove', 'GroupsController@removeFromGroup');
 });
 
 Route::group(['prefix' => 'api/v1'], function() {

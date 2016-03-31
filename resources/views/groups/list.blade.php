@@ -117,6 +117,11 @@
 
                                     @endif
 
+                                        <a href="{{ url('groups/' . $group->id . '/remove') }}" class="btn btn-lg btn-danger btn-block">
+                                            <i class="fa fa-trash"></i>
+                                            Remove Self from Group
+                                        </a>
+
                                 </div>
                             </div>
 

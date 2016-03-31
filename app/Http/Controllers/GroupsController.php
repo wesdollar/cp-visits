@@ -108,4 +108,14 @@ class GroupsController extends Controller
         return view('groups.join', compact('groups'));
     }
 
+    public function removeFromGroup($id) {
+
+        $group = Group::findOrFail($id);
+
+        $user = Auth::user();
+        $user->groups()->detach($group->id);
+
+        return redirect('/groups')->with('success', 'You have been removed from '.$group->name.'!');
+    }
+
 }
