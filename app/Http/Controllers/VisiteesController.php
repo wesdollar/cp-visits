@@ -86,4 +86,37 @@ class VisiteesController extends Controller
 
         return redirect('visitees')->with('success', $visitee->first . ' has been removed from your list.');
     }
+
+    public function getEdit($id) {
+
+        $user = Auth::user();
+        $groups = $user->groups;
+
+        // todo: refactor for easy reuse
+        $userDefaultGroup = (($user->settings->where('name', 'default_group')->first()) ? $user->settings->where('name', 'default_group')->first()->value : null);
+
+        $usStates = UsState::all();
+
+        $categories = VisiteeCategory::where('active', true)->get();
+
+        $visitee = Visitee::findOrFail($id);
+
+        return view('visitees.edit', compact('visitee', 'groups', 'usStates', 'categories', 'userDefaultGroup'));
+    }
+
+    public function postEdit(Request $request) {
+
+        $visitee = Visitee::findOrFail($request->id);
+
+        // detach from existing group so we can save them to the group provided on post
+        $visitee->groups()->detach();
+
+        // update visitee
+        $visitee->update($request->except('id', 'group'));
+
+        // attach to group
+        $visitee->groups()->attach($request->get('group'));
+
+        return redirect('visitees')->with('success', $request->first . '\'s details have been updated!');
+    }
 }

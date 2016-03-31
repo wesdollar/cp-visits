@@ -112,6 +112,11 @@
                                                     </a>
                                                 @endif
 
+                                                    <a href="{{ url('visitees/'. $visitee->id . '/edit') }}" class="btn btn-lg btn-warning btn-block">
+                                                        <i class="fa fa-trash"></i>
+                                                        Edit Details
+                                                    </a>
+
                                                     <a href="{{ url('visitees/'. $visitee->id . '/remove') }}" class="btn btn-lg btn-danger btn-block">
                                                         <i class="fa fa-trash"></i>
                                                         Remove from List
