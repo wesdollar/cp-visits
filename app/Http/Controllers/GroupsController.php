@@ -44,7 +44,8 @@ class GroupsController extends Controller
 
         $userDefaultGroupSetting = $user->settings->where('name', 'default_group')->first();
 
-        if ($userDefaultGroupSetting->value != null) {
+        if (isset($userDefaultGroupSetting->value) && ($userDefaultGroupSetting->value != null)) {
+
             $userDefaultGroupSetting->value = $groupId;
             $userDefaultGroupSetting->save();
 
