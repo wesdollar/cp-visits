@@ -25,12 +25,22 @@ class VisiteesController extends Controller
 
         $user = Auth::user();
 
+        // todo: refactor
+        // count visitees in all groups
+        $iVisitees = 0;
+
+        foreach ($user->groups as $group) {
+            $j = $group->visitees->count();
+
+            $iVisitees = $iVisitees + $j;
+        }
+
         // redirect to groups page and display error message if the user does not belong to a group
         if ($user->groups->count() < 1) {
             return redirect('/groups')->with('error', 'You do not belong to any groups. Please request to join an existing group by searching for the group below and create a new group.');
         }
 
-        return view('visitees.list', compact('user'));
+        return view('visitees.list', compact('user', 'iVisitees'));
     }
 
     public function getCreate() {
@@ -68,5 +78,12 @@ class VisiteesController extends Controller
         Visit::create($data);
 
         return redirect('/visitees')->with('success', 'You have been successfully checked in!');
+    }
+
+    public function remove($id) {
+        $visitee = Visitee::find($id);
+        $visitee->delete();
+
+        return redirect('visitees')->with('success', $visitee->first . ' has been removed from your list.');
     }
 }

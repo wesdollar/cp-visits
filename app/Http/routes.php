@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/visitees/create', 'VisiteesController@getCreate');
     Route::post('/visitees/create', 'VisiteesController@postCreate');
     Route::get('/visitees/check-in/{id}', 'VisiteesController@checkIn');
+    Route::get('/visitees/{id}/remove', 'VisiteesController@remove');
     Route::get('/visitees/{id}/visits', 'VisitsController@index');
     Route::get('/visitees/{id}/visits/create', 'VisitsController@getCreate');
     Route::post('/visitees/{id}/visits/create', 'VisitsController@postCreate');
