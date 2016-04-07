@@ -45,8 +45,17 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/groups/{id}/remove', 'GroupsController@removeFromGroup');
 });
 
-Route::group(['prefix' => 'api/v1'], function() {
-    Route::get('/groups', 'GroupsController@returnAllGroups');
+Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
+    Route::get('/groups', 'GroupsController@index');
+    Route::post('/groups', 'GroupsController@postCreate');
+    Route::get('/groups/{id}', 'GroupsController@getGroup');
+    Route::post('/groups/{id}/update', 'GroupsController@update');
+    Route::get('/groups/{id}/delete', 'GroupsController@delete');
+    Route::get('/visitees', ['uses' => 'VisiteesController@index']);
+    Route::post('/visitees', ['uses' => 'VisiteesController@postVisitee']);
+    Route::get('/visitees/{id}', 'VisiteesController@getVisitee');
+    Route::post('/visitees/{id}', 'VisiteesController@putVisitee');
+    Route::get('/visitees/check-in/{id}', 'VisiteesController@checkIn');
 });
 
 Route::auth();

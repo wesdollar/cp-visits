@@ -19,6 +19,10 @@ class Group extends Model
         return $this->belongsToMany('App\Visitee')->withTimestamps();
     }
 
+    public function visits() {
+        return $this->hasManyThrough('App\Visit', 'App\Visitee');
+    }
+
     public $algoliaSettings = [
         'attributesToIndex' => ['name', 'city', 'state', 'zip'],
     ];

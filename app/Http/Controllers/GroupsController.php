@@ -7,6 +7,7 @@ use App\User;
 use App\UserSetting;
 use App\UsState;
 use Auth;
+use CP\API;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -14,11 +15,41 @@ use App\Http\Requests;
 class GroupsController extends Controller
 {
 
-    public function index() {
+    public function index(Request $request) {
+
+        $api = new API();
+        $api->auth($request);
 
         $user = Auth::user();
 
-        return view('groups.list', compact('user'));
+        // return ajax results
+        if ($request->ajax()) {
+            $data = [];
+
+            foreach ($user->groups as $group) {
+
+                array_push($data, $group);
+
+            }
+
+            return response()->json($data);
+        }
+
+        else {
+            return view('groups.list', compact('user'));
+        }
+    }
+
+    public function getGroup(Request $request, $groupId) {
+
+        $api = new API();
+        $api->auth($request);
+
+        $user = Auth::user();
+
+        $group = Group::findOrFail($groupId);
+
+        return $group;
     }
 
     public function getCreate() {
@@ -30,12 +61,93 @@ class GroupsController extends Controller
 
     public function postCreate(Request $request) {
 
+        $api = new API();
+        $api->auth($request);
+
         $user = Auth::user();
 
-        $group = Group::create($request->all());
+        if ($request->ajax()) {
+            $data = [
+                'name' => $request->get('Name'),
+                'city' => $request->get('City'),
+                'state' => $request->get('State'),
+                'zip' => $request->get('Zip'),
+                'public' => $request->get('Public')
+            ];
+        }
+        else {
+            $data = [
+                'name' => $request->get('name'),
+                'city' => $request->get('city'),
+                'state' => $request->get('state'),
+                'zip' => $request->get('zip'),
+                'public' => ($request->has('public')) ? true : false,
+            ];
+        }
+
+        $group = Group::create($data);
+
         $user->groups()->attach($group->id);
 
-        return redirect('/groups')->with('success', 'Your group has been created!');
+        if ($request->ajax()) {
+
+            $data = [
+                'success' => true,
+                'message' => 'Group ' . $group->name . ' has been created successfully!',
+                'groupId' => $group->id
+            ];
+
+            return $data;
+        }
+        else {
+            return redirect('/groups')->with('success', 'Your group has been created!');
+        }
+    }
+
+    public function update(Request $request, $groupId) {
+
+        $api = new API();
+        $api->auth($request);
+
+        $user = Auth::user();
+
+        $data = $request->except('id');
+
+        $group = Group::findOrFail($groupId);
+
+        $group->name = $data['name'];
+        $group->city = $data['city'];
+        $group->state = $data['state'];
+        $group->zip = $data['zip'];
+        $group->public = $data['public'];
+
+        $group->save();
+
+        $data = [
+            'success' => true,
+            'message' => $group->name . ' has been updated successfully!'
+        ];
+
+        return $data;
+    }
+
+    public function delete(Request $request, $groupId) {
+
+        $api = new API();
+        $api->auth($request);
+
+        $user = Auth::user();
+
+        $user->groups()->detach($groupId);
+
+        Group::destroy($groupId);
+
+        $data = [
+            'success' => true,
+            'message' => 'Group has been deleted successfully.'
+        ];
+
+        return $data;
     }
 
     public function setDefaultGroup($groupId) {
@@ -69,13 +181,13 @@ class GroupsController extends Controller
     public function returnAllGroups() {
 
         // initial index
-        $groups = Group::all();
+        $groups = Group::all()->sortBy('name');
 
         foreach ($groups as $group) {
             $group->pushToIndex();
         }
 
-        return 'Indexed!';
+        return $groups;
 
 //        return Group::setSettings();
     }

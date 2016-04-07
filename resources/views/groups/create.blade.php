@@ -78,7 +78,22 @@
 
                     </div> <!-- // zip -->
 
-                    <div class="form-group">
+                    <div class="checkbox{{ $errors->has('public') ? ' has-error' : '' }}" style="margin-top: 20px;">
+
+                        <label>
+                            <input type="checkbox" value="true" name="public" placeholder="{{ old('public') }}" checked>
+                            Public group? Make this group available to all registered members.
+                        </label>
+
+                        @if ($errors->has('public'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('public') }}</strong>
+                            </span>
+                        @endif
+
+                    </div> <!-- // active -->
+
+                    <div class="form-group top-margin">
                         <button type="submit" class="btn btn-primary">
                             <span class="glyphicon glyphicon-pushpin"></span> Create Group
                         </button>

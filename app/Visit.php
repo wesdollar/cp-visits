@@ -25,4 +25,5 @@ class Visit extends Model
     public function type() {
         return $this->belongsTo('App\CheckinType', 'category_id');
     }
+
 }

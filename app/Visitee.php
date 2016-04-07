@@ -12,9 +12,9 @@ class Visitee extends Model {
         return $this->belongsToMany('App\Group')->withTimestamps();
     }
 
-    public function group() {
-        return $this->belongsTo('App\Group');
-    }
+//    public function group() {
+//        return $this->belongsTo('App\Group');
+//    }
 
     public function visits() {
         return $this->hasMany('App\Visit');
