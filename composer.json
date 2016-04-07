@@ -22,11 +22,12 @@
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database",
+            "app/CP"
         ],
         "psr-4": {
-            "App\\": "app/",
-            "CP\\": "app/cp/"
+            "App\\": "app/"
+            // "CP\\": "app/cp/"
         }
     },
     "autoload-dev": {
