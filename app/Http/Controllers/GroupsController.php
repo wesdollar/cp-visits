@@ -140,11 +140,15 @@ class GroupsController extends Controller
 
         $user->groups()->detach($groupId);
 
-        Group::destroy($groupId);
+        $group = Group::findOrFail($groupId);
+
+        // save group name for returning in message before we delete it
+        $groupName = $group->name;
+        $group->delete();
 
         $data = [
             'success' => true,
-            'message' => 'Group has been deleted successfully.'
+            'message' => $groupName . ' has been deleted successfully.'
         ];
 
         return $data;
