@@ -12,6 +12,8 @@
 */
 
 // todo: remove
+use App\UsState;
+
 Route::get('/forget-success', function() {
     \Request::session()->forget('success');
 
@@ -55,7 +57,13 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
     Route::post('/visitees', ['uses' => 'VisiteesController@postVisitee']);
     Route::get('/visitees/{id}', 'VisiteesController@getVisitee');
     Route::post('/visitees/{id}', 'VisiteesController@putVisitee');
-    Route::get('/visitees/check-in/{id}', 'VisiteesController@checkIn');
+    Route::post('/visitees/check-in/{id}', 'VisiteesController@checkIn');
 });
 
 Route::auth();
+
+Route::get('functions/us-state', function() {
+
+    return UsState::get(['id', 'name', 'abbr']);
+
+});

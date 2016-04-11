@@ -9,6 +9,7 @@ use App\UsState;
 use App\Visit;
 use App\Visitee;
 use App\VisiteeCategory;
+use App\VisitNote;
 use Auth;
 use Carbon\Carbon;
 use CP\API;
@@ -100,20 +101,25 @@ class VisiteesController extends Controller
         $data = [
             'user_id' => $user->id,
             'visitee_id' => $id,
+            'category_id' => $request->json('type')
         ];
 
         $visit = Visit::create($data);
 
+        if ($request->json('message')) {
+            $note = new VisitNote(['note' => $request->json('message')]);
+            $visit->notes()->save($note);
+        }
+
         // handle ajax response
         if ($request->ajax()) {
 
-            // default checkin type to 'visited'
-            $visit->category_id = 1;
-            $visit->save();
-
             return response()->json([
                 'success' => true,
-                'message' => 'You checked in successfully!'
+                'message' => 'You checked in successfully!',
+                'note' => $request->json('message'),
+                'category_id' => $request->json('type'),
+                'visit' => $visit
             ]);
         }
 
