@@ -16,7 +16,7 @@ class Group extends Model
     }
 
     public function visitees() {
-        return $this->belongsToMany('App\Visitee')->withTimestamps();
+        return $this->belongsToMany('App\Visitee')->withTimestamps()->orderBy('first');
     }
 
     public function visits() {
