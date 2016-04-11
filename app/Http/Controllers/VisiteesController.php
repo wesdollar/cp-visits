@@ -22,7 +22,6 @@ class VisiteesController extends Controller
 
     public function index(Request $request) {
 
-        // todo: remove, replace with authentication
         $api = new API();
         $api->auth($request);
 
@@ -40,19 +39,7 @@ class VisiteesController extends Controller
 
         // return ajax results
         if ($request->ajax()) {
-            $data = [];
-
-            foreach ($user->groups as $group) {
-
-                foreach ($group->visitees as $visitee) {
-                    $visitee->visits;
-                }
-
-                array_push($data, $group);
-
-            }
-
-            return response()->json($data);
+            return $this->returnAjaxResults($user);
         }
 
         // response for standard web-app
@@ -206,7 +193,8 @@ class VisiteesController extends Controller
             'visiteeId' => (string) $visitee->id
         ];
 
-        return $data;
+        // return all groups
+        return $this->returnAjaxResults($user, $data);
     }
 
     public function putVisitee(Request $request, $visiteeId) {
@@ -347,10 +335,32 @@ class VisiteesController extends Controller
             'zip'         => $request->get('Zip'),
             'email'       => $request->get('Email'),
             'phone'       => $request->get('Phone'),
-            'category_id' => $request->get('VisiteeType'),
+            'category_id' => $request->get('VisiteeTypeId'),
         ];
 
         return $data;
+    }
+
+    private function returnAjaxResults($user, $data=null) {
+
+        if ($data) {
+            $data = [$data];
+        }
+        else {
+            $data = [];
+        }
+
+        foreach ($user->groups as $group) {
+
+            foreach ($group->visitees as $visitee) {
+                $visitee->visits;
+            }
+
+            array_push($data, $group);
+
+        }
+
+        return response()->json($data);
     }
 
 }
