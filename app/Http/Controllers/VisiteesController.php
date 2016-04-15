@@ -199,7 +199,6 @@ class VisiteesController extends Controller
 
     public function putVisitee(Request $request, $visiteeId) {
 
-        // todo: remove, replace with authentication
         $api = new API();
         $api->auth($request);
 
@@ -220,6 +219,38 @@ class VisiteesController extends Controller
 
         $data = [
             'success' => $visitee->first . '\'s information has been updated successfully!'
+        ];
+
+        return $data;
+    }
+
+    public function deleteVisitee(Request $request, $visiteeId) {
+
+        $api = new API();
+        $api->auth($request);
+
+        $visitee = Visitee::find($visiteeId);
+
+        if (!$visitee) {
+
+            $error = [
+                'error' => [
+                    'isError' => true,
+                    'message' => 'Visitee not found!'
+                ],
+                'success' => false,
+            ];
+
+            return $error;
+        }
+
+        $name = $visitee->first;
+
+        $visitee->delete();
+
+        $data = [
+            'success' => true,
+            'message' => $name . ' has been removed.'
         ];
 
         return $data;
