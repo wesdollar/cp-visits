@@ -59,6 +59,9 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
     Route::post('/visitees/{id}', 'VisiteesController@putVisitee');
     Route::post('/visitees/check-in/{id}', 'VisiteesController@checkIn');
     Route::delete('/visitees/{id}', 'VisiteesController@deleteVisitee');
+
+    Route::get('/users/{id}', 'UsersController@get');
+    Route::put('/users/{id}', 'UsersController@putUpdate');
 });
 
 Route::auth();
