@@ -67,7 +67,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
     Route::post('/image-upload', function() {
 
         $destinationPath = 'uploads/';
-        $saveAsName = rand(10,20) . '.jpg';
+        $saveAsName = str_random(40) . '.jpg';
 
         $file = \Request::file('file');
 
