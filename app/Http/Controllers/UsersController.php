@@ -35,9 +35,11 @@ class UsersController extends Controller
         $user = Auth::user();
 
         // todo: error handling if $user not found
+        // todo: duplicate email exists error message
 
         $user->first = $request->get('first');
         $user->last = $request->get('last');
+        $user->email = $request->get('email');
         $user->save();
 
         return ['success' => true, 'message' => 'Your profile has been saved.'];
