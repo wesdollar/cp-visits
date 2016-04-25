@@ -63,6 +63,37 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
     Route::get('/users/{id}', 'UsersController@get');
     Route::put('/users/{id}', 'UsersController@putUpdate');
     Route::post('/register', 'UsersController@create');
+
+    Route::post('/image-upload', function(Request $request) {
+
+        $destinationPath = 'uploads/';
+        $saveAsName = rand(10,20) . '.jpg';
+
+        $file = $request->file('file');
+
+        if ($file->isValid()) {
+
+            if ($file->move($destinationPath, $saveAsName)) {
+
+                return ['success' => true, 'message' => 'File saved.'];
+            }
+            else {
+
+                $json = ['success' => false, 'message' => 'Could not move file.'];
+
+                return response()->json($json, 400);
+            }
+        }
+        else {
+
+            $json = ['success' => false, 'message' => 'File not valid.'];
+
+            return response()->json($json, 400);
+        }
+
+
+
+    });
 });
 
 Route::auth();
