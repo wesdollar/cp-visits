@@ -64,12 +64,12 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
     Route::put('/users/{id}', 'UsersController@putUpdate');
     Route::post('/register', 'UsersController@create');
 
-    Route::post('/image-upload', function(Request $request) {
+    Route::post('/image-upload', function() {
 
         $destinationPath = 'uploads/';
         $saveAsName = rand(10,20) . '.jpg';
 
-        $file = $request->file('file');
+        $file = \Request::file('file');
 
         if ($file->isValid()) {
 
