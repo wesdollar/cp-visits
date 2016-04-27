@@ -11,16 +11,20 @@ use CP\API;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GroupsController extends Controller
 {
 
+    protected $api;
+
+    public function __construct() {
+        $this->api = new API();
+    }
+
     public function index(Request $request) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         // return ajax results
         if ($request->ajax()) {
@@ -61,10 +65,7 @@ class GroupsController extends Controller
 
     public function postCreate(Request $request) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         if ($request->ajax()) {
             $data = [
@@ -106,10 +107,7 @@ class GroupsController extends Controller
 
     public function update(Request $request, $groupId) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         $data = $request->except('id');
 
@@ -133,10 +131,7 @@ class GroupsController extends Controller
 
     public function delete(Request $request, $groupId) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         $user->groups()->detach($groupId);
 

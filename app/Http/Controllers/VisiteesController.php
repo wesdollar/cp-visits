@@ -16,16 +16,20 @@ use CP\API;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Session;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class VisiteesController extends Controller
 {
 
+    protected $api;
+
+    public function __construct() {
+        $this->api = new API();
+    }
+
     public function index(Request $request) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         // todo: refactor
         // count visitees in all groups
@@ -54,9 +58,10 @@ class VisiteesController extends Controller
 
     }
 
-    public function getCreate() {
+    public function getCreate(Request $request) {
 
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
+
         $groups = $user->groups;
 
         // todo: refactor for easy reuse
@@ -71,6 +76,8 @@ class VisiteesController extends Controller
 
     public function postCreate(Request $input, CreateVisiteeRequest $request) {
 
+        $user = $this->api->verifyToken($input);
+
         $visitee = Visitee::create($input->except('group'));
 
         $visitee->groups()->attach($input->get('group'));
@@ -80,10 +87,7 @@ class VisiteesController extends Controller
 
     public function checkIn(Request $request, $id) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         $data = [
             'user_id' => $user->id,
@@ -155,11 +159,7 @@ class VisiteesController extends Controller
 
     public function getVisitee(Request $request, $visiteeId) {
 
-        // todo: remove, replace with authentication
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         $visitee = Visitee::find($visiteeId);
 
@@ -176,10 +176,7 @@ class VisiteesController extends Controller
     // todo: refactor (duplicate "method" postCreate = postVisitee)
     public function postVisitee(Request $request) {
 
-        $api = new API();
-        $api->auth($request);
-
-        $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         $data = $this->transformVisiteeInput($request);
 
@@ -199,10 +196,7 @@ class VisiteesController extends Controller
 
     public function putVisitee(Request $request, $visiteeId) {
 
-        $api = new API();
-        $api->auth($request);
-
-        // $user = Auth::user();
+        $user = $this->api->verifyToken($request);
 
         $visitee = Visitee::findOrFail($visiteeId);
 
@@ -226,8 +220,7 @@ class VisiteesController extends Controller
 
     public function deleteVisitee(Request $request, $visiteeId) {
 
-        $api = new API();
-        $api->auth($request);
+        $user = $this->api->verifyToken($request);
 
         $visitee = Visitee::find($visiteeId);
 

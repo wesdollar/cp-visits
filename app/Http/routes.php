@@ -13,6 +13,7 @@
 
 // todo: remove
 use App\UsState;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 Route::get('/forget-success', function() {
     \Request::session()->forget('success');
@@ -47,7 +48,10 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/groups/{id}/remove', 'GroupsController@removeFromGroup');
 });
 
-Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
+Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], function() {
+
+    Route::post('/authenticate', 'UsersController@authenticate');
+
     Route::get('/groups', 'GroupsController@index');
     Route::post('/groups', 'GroupsController@postCreate');
     Route::get('/groups/{id}', 'GroupsController@getGroup');
@@ -64,6 +68,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
     Route::put('/users/{id}', 'UsersController@putUpdate');
     Route::post('/register', 'UsersController@create');
 
+    // todo: remove after testing
     Route::post('/image-upload', function() {
 
         $destinationPath = 'uploads/';
@@ -91,8 +96,22 @@ Route::group(['prefix' => 'api/v1', 'middleware' => 'cors'], function() {
             return response()->json($json, 400);
         }
 
+    });
 
+    // todo: remove after testing
+    Route::get('/verify-user', function() {
 
+        $user = JWTAuth::parseToken()->authenticate();
+
+        return response()->json(compact('user'));
+    });
+
+    // todo: remove after testing
+    Route::get('/destroy-token', function() {
+
+        $token = JWTAuth::invalidate(JWTAuth::getToken());
+
+        return response()->json(compact('token'));
     });
 });
 
