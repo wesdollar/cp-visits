@@ -49,7 +49,9 @@ Route::group(['middleware' => ['auth']], function() {
 });
 
 Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
+
     Route::post('/authenticate', 'UsersController@authenticate');
+    Route::post('/register', 'UsersController@create');
 });
 
 Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], function() {
@@ -68,7 +70,6 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
 
     Route::get('/users/{id}', 'UsersController@get');
     Route::put('/users/{id}', 'UsersController@putUpdate');
-    Route::post('/register', 'UsersController@create');
 
     // todo: remove after testing
     Route::post('/image-upload', function() {
@@ -111,9 +112,14 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
     // todo: remove after testing
     Route::get('/destroy-token', function() {
 
-        $token = JWTAuth::invalidate(JWTAuth::getToken());
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+        }
+        catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
 
-        return response()->json(compact('token'));
+        return response()->json(['success' => true, 'message' => 'token_destroyed']);
     });
 });
 
