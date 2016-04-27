@@ -94,4 +94,16 @@ class UsersController extends Controller
         return $this->api->jwtLogin($credentials);
     }
 
+    public function destroyToken(Request $request) {
+
+        try {
+            JWTAuth::invalidate(JWTAuth::getToken());
+        }
+        catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'token_destroyed']);
+    }
+
 }

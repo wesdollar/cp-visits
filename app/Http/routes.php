@@ -70,6 +70,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
 
     Route::get('/users/{id}', 'UsersController@get');
     Route::put('/users/{id}', 'UsersController@putUpdate');
+    Route::get('/destroy-token', 'UsersController@destroyToken');
 
     // todo: remove after testing
     Route::post('/image-upload', function() {
@@ -109,18 +110,6 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
         return response()->json(compact('user'));
     });
 
-    // todo: remove after testing
-    Route::get('/destroy-token', function() {
-
-        try {
-            JWTAuth::invalidate(JWTAuth::getToken());
-        }
-        catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()]);
-        }
-
-        return response()->json(['success' => true, 'message' => 'token_destroyed']);
-    });
 });
 
 Route::auth();
