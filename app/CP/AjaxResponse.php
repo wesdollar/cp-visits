@@ -29,7 +29,12 @@ class AjaxResponse {
         return response()->json(compact('json', 'token'));
     }
 
-    public function error($message, int $statusCode = 400, $eCode = null) {
+    public function error($message, int $statusCode = null, $eCode = null) {
+
+        // set default status code
+        if ($statusCode == null) {
+            $statusCode = 400;
+        }
 
         $json = [
             'success' => false,

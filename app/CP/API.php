@@ -58,7 +58,7 @@ class API {
         }
     }
 
-    public function getUserFromToken(bool $ajax=false) {
+    public function getUserFromToken(bool $ajax=null) {
 
         try {
 
