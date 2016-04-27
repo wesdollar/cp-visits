@@ -52,27 +52,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
 
     Route::post('/authenticate', 'UsersController@authenticate');
     Route::post('/register', 'UsersController@create');
-});
 
-Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], function() {
-
-    Route::get('/groups', 'GroupsController@index');
-    Route::post('/groups', 'GroupsController@postCreate');
-    Route::get('/groups/{id}', 'GroupsController@getGroup');
-    Route::post('/groups/{id}/update', 'GroupsController@update');
-    Route::get('/groups/{id}/delete', 'GroupsController@delete');
-    Route::get('/visitees', ['uses' => 'VisiteesController@index']);
-    Route::post('/visitees', ['uses' => 'VisiteesController@postVisitee']);
-    Route::get('/visitees/{id}', 'VisiteesController@getVisitee');
-    Route::post('/visitees/{id}', 'VisiteesController@putVisitee');
-    Route::post('/visitees/check-in/{id}', 'VisiteesController@checkIn');
-    Route::delete('/visitees/{id}', 'VisiteesController@deleteVisitee');
-
-    Route::get('/users/{id}', 'UsersController@get');
-    Route::put('/users/{id}', 'UsersController@putUpdate');
-    Route::get('/destroy-token', 'UsersController@destroyToken');
-
-    // todo: remove after testing
     Route::post('/image-upload', function() {
 
         $destinationPath = 'uploads/';
@@ -101,6 +81,25 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
         }
 
     });
+});
+
+Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], function() {
+
+    Route::get('/groups', 'GroupsController@index');
+    Route::post('/groups', 'GroupsController@postCreate');
+    Route::get('/groups/{id}', 'GroupsController@getGroup');
+    Route::post('/groups/{id}/update', 'GroupsController@update');
+    Route::get('/groups/{id}/delete', 'GroupsController@delete');
+    Route::get('/visitees', ['uses' => 'VisiteesController@index']);
+    Route::post('/visitees', ['uses' => 'VisiteesController@postVisitee']);
+    Route::get('/visitees/{id}', 'VisiteesController@getVisitee');
+    Route::post('/visitees/{id}', 'VisiteesController@putVisitee');
+    Route::post('/visitees/check-in/{id}', 'VisiteesController@checkIn');
+    Route::delete('/visitees/{id}', 'VisiteesController@deleteVisitee');
+
+    Route::get('/users/{id}', 'UsersController@get');
+    Route::put('/users/{id}', 'UsersController@putUpdate');
+    Route::get('/destroy-token', 'UsersController@destroyToken');
 
     // todo: remove after testing
     Route::get('/verify-user', function() {
