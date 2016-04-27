@@ -48,9 +48,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/groups/{id}/remove', 'GroupsController@removeFromGroup');
 });
 
-Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], function() {
-
+Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
     Route::post('/authenticate', 'UsersController@authenticate');
+});
+
+Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], function() {
 
     Route::get('/groups', 'GroupsController@index');
     Route::post('/groups', 'GroupsController@postCreate');
