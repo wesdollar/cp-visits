@@ -67,8 +67,6 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
             if ($fileObj = $file->move($destinationPath, $saveAsName)) {
 
                 $json = [
-                    'success' => true,
-                    'message' => 'File saved.',
                     'file' => $fileObj
                 ];
 
