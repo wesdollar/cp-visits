@@ -55,6 +55,8 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
 
     Route::post('/image-upload', function() {
 
+        // todo: move elsewhere... anywhere but here
+
         $destinationPath = 'uploads/';
         $saveAsName = str_random(40) . '.jpg';
 
@@ -62,9 +64,9 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
 
         if ($file->isValid()) {
 
-            if ($file->move($destinationPath, $saveAsName)) {
+            if ($fileObj = $file->move($destinationPath, $saveAsName)) {
 
-                return ['success' => true, 'message' => 'File saved.'];
+                return ['success' => true, 'message' => 'File saved.', 'file' => $fileObj];
             }
             else {
 
