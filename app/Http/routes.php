@@ -66,7 +66,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
 
             if ($fileObj = $file->move($destinationPath, $saveAsName)) {
 
-                return response()->json($destinationPath . $saveAsName);
+                return $destinationPath . $saveAsName;
             }
             else {
 
