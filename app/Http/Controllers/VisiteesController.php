@@ -367,6 +367,7 @@ class VisiteesController extends Controller
             'email'       => $request->get('Email'),
             'phone'       => $request->get('Phone'),
             'category_id' => $request->get('VisiteeTypeId'),
+            'address_desc' => $request->get('AddressDesc'),
         ];
 
         return $data;
