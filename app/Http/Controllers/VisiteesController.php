@@ -98,7 +98,13 @@ class VisiteesController extends Controller
         $visit = Visit::create($data);
 
         if ($request->json('message')) {
-            $note = new VisitNote(['note' => $request->json('message')]);
+
+            $data = [
+                'note' => $request->json('message'),
+                'image' => $request->json('image'),
+            ];
+
+            $note = new VisitNote($data);
             $visit->notes()->save($note);
         }
 
@@ -110,6 +116,7 @@ class VisiteesController extends Controller
                 'message' => 'You checked in successfully!',
                 'note' => $request->json('message'),
                 'category_id' => $request->json('type'),
+                'image' => $request->json('image'),
                 'visit' => $visit
             ]);
         }
