@@ -313,7 +313,8 @@ class VisiteesController extends Controller
 
         $data = array_map(function($note) {
             return [
-                'message' => $note['note']
+                'message' => $note['note'],
+                'image' => $note['image'],
             ];
         }, $notes);
 
