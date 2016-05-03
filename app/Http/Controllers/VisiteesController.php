@@ -101,7 +101,8 @@ class VisiteesController extends Controller
 
             $data = [
                 'note' => $request->json('message'),
-                'image' => $request->json('image'),
+                // 'image' => $request->json('image'),
+                'image' => 'uploads/zreJPmggDRngtxFdMO72GDApM2aiqQ6ysBLDyZF5.jpg',
             ];
 
             $note = new VisitNote($data);
