@@ -395,7 +395,7 @@ class VisiteesController extends Controller
                 if ($visitee->address_desc != null) {
 
                     // search array for current address_desc, add if not found
-                    if (!array_search($visitee->address_desc, $desc_array)) {
+                    if (array_search($visitee->address_desc, array_column($desc_array, 'name')) === false) {
 
                         array_push($desc_array, ['name' => $visitee->address_desc]);
                     }
