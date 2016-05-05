@@ -272,6 +272,7 @@ class VisiteesController extends Controller
             'email' => $visitee->email,
             'visiteeType' => VisiteeCategory::find($visitee->category_id)->name,
             'visiteeTypeId' => (string) $visitee->category_id,
+            'hospital' => $visitee->address_desc,
             'groupId' => (string) $visitee->groups->first()->id,
             'visits' => $this->visitsTransformer($visitee->visits),
             'userCheckedIn' => $this->userCheckedInToday($visitee, $user)
