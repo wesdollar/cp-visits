@@ -384,17 +384,28 @@ class VisiteesController extends Controller
             $data = [];
         }
 
+        $desc_array = [];
+
         foreach ($user->groups as $group) {
 
             foreach ($group->visitees as $visitee) {
                 $visitee->visits;
+
+                if ($visitee->address_desc != null) {
+                    array_push($desc_array, ['name' => $visitee->address_desc]);
+                }
             }
 
             array_push($data, $group);
-
         }
 
-        return response()->json($data);
+        // package json results
+        $return = [
+            'visitees' => $data,
+            'address_descs' => $desc_array
+        ];
+
+        return response()->json($return);
     }
 
 }
