@@ -1,0 +1,147 @@
+@import "variables";
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/font-awesome/scss/font-awesome.scss";
+
+body {
+  font-family: 'Lato';
+  font-size: 16px;
+  background-color: $white;
+  color: $black;
+}
+
+p {
+  line-height: 1.6em;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.big-font {
+  font-size: $big-font;
+}
+.bigger-font {
+  font-size: $bigger-font;
+}
+.biggest-font {
+  font-size: $biggest-font;
+}
+.small-font {
+  font-size: $small-font;
+}
+.smaller-font {
+  font-size: $smaller-font;
+}
+.smallest-font {
+  font-size: $smallest-font;
+}
+
+.center {
+  text-align: center;
+}
+
+.top-gutter {
+  margin-top: $gutter;
+}
+
+.bottom-gutter {
+  margin-bottom: $gutter;
+}
+
+.splash-screen {
+  background: $primary-color url('../img/bg-splash-no-logo.png') 0 bottom;
+  background-size: cover;
+  padding: 50px 0;
+  color: $white;
+}
+
+#nav {
+  .btn {
+    margin-right: 10px;
+  }
+}
+
+#leader {
+  text-align: center;
+  margin: $row-spacing 0 0;
+}
+
+@mixin row-padding($row-spacing) {
+  padding-top: $row-spacing;
+  padding-bottom: $row-spacing;
+}
+
+.main-content {
+  @include row-padding($row-spacing * 2);
+}
+
+.alt-content {
+  @include row-padding($row-spacing);
+  background-color: $primary-color;
+  color: $white;
+}
+
+.footer {
+  padding-top: $gutter;
+  padding-bottom: $gutter;
+  color: $white;
+  background-color: darken($primary-color, 10%);
+  p {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.app-store-bar {
+  text-align: center;
+  margin-top: $row-spacing;
+  img {
+    width: 150px;
+    height: auto;
+  }
+  img:first-child {
+    margin-right: 15px;
+  }
+}
+
+.icon-row {
+  text-align: center;
+  .fa {
+    margin-bottom: $gutter;
+  }
+}
+
+@media (max-width: 801px) {
+  [class*='col-'] {
+    margin-top: $row-spacing;
+  }
+  #leader {
+    margin-top: 0;
+  }
+  div:first-child {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 321px) {
+  .app-store-bar {
+    img:first-child {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.navbar {
+  margin-bottom: 0 !important;
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  border-color: darken($primary-color, 10%);
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    border-color: darken($primary-color, 20%);
+  }
+}

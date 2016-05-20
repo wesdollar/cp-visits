@@ -15,6 +15,10 @@
 use App\UsState;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+Route::get('/marketing-landing', function() {
+    return view('layouts.marketing');
+});
+
 Route::get('/forget-success', function() {
     \Request::session()->forget('success');
 
