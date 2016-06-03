@@ -23,12 +23,12 @@
                 <p>
                     <a href="{{ url('/groups/create') }}" class="btn btn-block btn-primary">
                         <i class="fa fa-group"></i>
-                        Create a New Group
+                        Create a New List
                     </a>
                 </p>
 
                 <p>
-                    <input type="text" id="search-input" class="form-control" placeholder="Search for Group to Join" />
+                    <input type="text" id="search-input" class="form-control" placeholder="Search for List to Join" />
                     <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
                     <script src="//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
                     <script>
@@ -51,7 +51,7 @@
                     </script>
                 </p>
 
-                <h3>Your Groups</h3>
+                <h3>Your Lists</h3>
             </div>
         </div>
 
@@ -99,27 +99,31 @@
                                 </div>
                                 <div class="col-md-6">
 
+                                    <a href="{{ url('/groups/' . $group->id . '/share') }}" class="btn btn-lg btn-primary btn-block">
+                                        Share List
+                                    </a>
+
                                     @if (!$user->settings()->where('name', 'default_group')->first())
 
                                         <a href="{{ url('groups/set-default/' . $group->id) }}" class="btn btn-lg btn-success btn-block">
-                                            Set as Default Group
+                                            Set as Default List
                                         </a>
 
                                     @else
 
                                         @if ($user->settings()->where('name', 'default_group')->first()->value != $group->id)
                                             <a href="{{ url('groups/set-default/' . $group->id) }}" class="btn btn-lg btn-success btn-block">
-                                                Set as Default Group
+                                                Set as Default List
                                             </a>
                                         @else
-                                            <i class="fa fa-star"></i> Default Group
+                                            <i class="fa fa-star"></i> Default List
                                         @endif
 
                                     @endif
 
                                         <a href="{{ url('groups/' . $group->id . '/remove') }}" class="btn btn-lg btn-danger btn-block">
                                             <i class="fa fa-trash"></i>
-                                            Remove Self from Group
+                                            Remove Self from List
                                         </a>
 
                                 </div>

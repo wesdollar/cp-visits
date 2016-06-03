@@ -18,6 +18,10 @@ img {
   height: auto;
 }
 
+ol li {
+  line-height: 1.6em;
+}
+
 .big-font {
   font-size: $big-font;
 }
@@ -74,6 +78,16 @@ img {
 
 .main-content {
   @include row-padding($row-spacing * 2);
+}
+.main-content.inside-content {
+  padding-top: 80px;
+}
+
+.inside-header {
+  background-color: darken($primary-color, 15%);
+  color: $white;
+  @include row-padding($row-spacing);
+  padding-top: $row-spacing + 50;
 }
 
 .alt-content {
@@ -143,5 +157,35 @@ img {
   &:hover {
     background-color: darken($primary-color, 10%);
     border-color: darken($primary-color, 20%);
+  }
+  &:active {
+    background-color: darken($primary-color, 14%);
+    border-color: darken($primary-color, 25%);
+  }
+}
+
+.navbar-inverse {
+  background-color: $primary-color;
+  color: $white;
+  border-color: darken($primary-color, 10%);
+}
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav > li > a,
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+  color: $white;
+  &:hover {
+    color: darken($white, 10%);
+  }
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+  background-color: darken($primary-color, 10%);
+}
+
+.help-topics h2 {
+  margin-top: $row-spacing;
+  &:first-child {
+    margin-top: 0;
   }
 }

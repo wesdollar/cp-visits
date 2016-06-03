@@ -7837,6 +7837,9 @@ img {
   max-width: 100%;
   height: auto; }
 
+ol li {
+  line-height: 1.6em; }
+
 .big-font {
   font-size: 1.4em; }
 
@@ -7880,6 +7883,16 @@ img {
 .main-content {
   padding-top: 100px;
   padding-bottom: 100px; }
+
+.main-content.inside-content {
+  padding-top: 80px; }
+
+.inside-header {
+  background-color: #ab5701;
+  color: #fff;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-top: 100px; }
 
 .alt-content {
   padding-top: 50px;
@@ -7932,5 +7945,30 @@ img {
   .btn-primary:hover {
     background-color: #c46302;
     border-color: #924a01; }
+  .btn-primary:active {
+    background-color: #b05901;
+    border-color: #793d01; }
+
+.navbar-inverse {
+  background-color: #f77d02;
+  color: #fff;
+  border-color: #c46302; }
+
+.navbar-inverse .navbar-brand,
+.navbar-inverse .navbar-nav > li > a,
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+  color: #fff; }
+  .navbar-inverse .navbar-brand:hover,
+  .navbar-inverse .navbar-nav > li > a:hover,
+  .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:hover:hover, .navbar-inverse .navbar-nav > .active > a:focus:hover {
+    color: #e6e6e6; }
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+  background-color: #c46302; }
+
+.help-topics h2 {
+  margin-top: 50px; }
+  .help-topics h2:first-child {
+    margin-top: 0; }
 
 /*# sourceMappingURL=marketing.css.map */

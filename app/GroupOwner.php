@@ -8,5 +8,5 @@ class GroupOwner extends Model
 {
     protected $table = 'group_owner';
 
-    protected $fillable = ['group_id', 'owner_id'];
+    protected $fillable = ['group_id', 'user_id'];
 }

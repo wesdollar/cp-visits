@@ -42,7 +42,7 @@
                 <ul class="nav navbar-nav">
                     @if (Auth::user())
                         <li><a href="{{ url('/visitees') }}">Visitees</a></li>
-                        <li><a href="{{ url('/groups') }}">Groups</a></li>
+                        <li><a href="{{ url('/groups') }}">Lists</a></li>
                     @endif
                 </ul>
 
@@ -91,6 +91,17 @@
             });
         </script>
     @endif
+
+    <script>
+        $(document).ready(function() {
+
+            $('#addEmail').click(function(e) {
+                e.preventDefault();
+                $('#extraEmails').append('<br><input type="text" class="form-control" id="form-name" name="email[]" placeholder="email address">');
+            });
+
+        });
+    </script>
 
 </body>
 </html>

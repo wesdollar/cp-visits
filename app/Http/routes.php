@@ -16,7 +16,11 @@ use App\UsState;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 Route::get('/marketing-landing', function() {
-    return view('layouts.marketing');
+    return view('marketing.home');
+});
+
+Route::get('/help', function() {
+    return view('marketing.help');
 });
 
 Route::get('/forget-success', function() {
@@ -24,6 +28,8 @@ Route::get('/forget-success', function() {
 
     return redirect()->back();
 });
+
+Route::get('/invite/{code?}', 'SubscribeController@registerOrLogin');
 
 Route::get('/', function () {
     return redirect('visitees');
@@ -48,8 +54,15 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/groups/create', 'GroupsController@getCreate');
     Route::post('groups/create', 'GroupsController@postCreate');
     Route::get('groups/set-default/{id}', 'GroupsController@setDefaultGroup');
+
+    // todo: fix URL ( groups/{id?}/join )
     Route::get('/groups/join/{id?}', 'GroupsController@joinGroup');
+
     Route::get('/groups/{id}/remove', 'GroupsController@removeFromGroup');
+    Route::get('/groups/{id}/share', 'GroupsController@share');
+    Route::post('/groups/{id}/share', 'GroupsController@sendShareEmails');
+
+    Route::get('/requests/{code}/approve', 'GroupsController@approveJoinRequest');
 });
 
 Route::group(['prefix' => 'api/v1', 'middleware' => ['cors']], function() {
@@ -124,3 +137,7 @@ Route::get('functions/us-state', function() {
     return UsState::get(['id', 'name', 'abbr']);
 
 });
+
+if (App::environment() == 'local') {
+    Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
+}

@@ -25,7 +25,7 @@ class User extends Authenticatable
     ];
 
     public function groups() {
-        return $this->belongsToMany('App\Group')->orderBy('name');
+        return $this->belongsToMany('App\Group')->orderBy('name')->withTimestamps();
     }
 
     public function visits() {

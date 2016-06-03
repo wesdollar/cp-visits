@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\GroupOwner;
+use App\JoinRequest;
 use App\User;
 use App\UserSetting;
 use App\UsState;
@@ -11,6 +13,7 @@ use CP\API;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Mail;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class GroupsController extends Controller
@@ -89,6 +92,9 @@ class GroupsController extends Controller
         $group = Group::create($data);
 
         $user->groups()->attach($group->id);
+
+        // add user as group owner
+        GroupOwner::create(['group_id' => $group->id, 'user_id' => $user->id]);
 
         if ($request->ajax()) {
 
@@ -204,11 +210,44 @@ class GroupsController extends Controller
                 return redirect()->back()->with('success', 'You already belong to '.$group->name.'!');
             }
             else {
-                $user->groups()->attach($groupId);
+                // $user->groups()->attach($groupId);
+
+                // find owner of group
+                // todo: error message
+                $groupOwner = GroupOwner::where('group_id', $groupId)->first();
+
+                // unique request code
+                $code = $this->uniqueRequestCode();
+
+                // create join request with unique code
+                $data = [
+                    'group_id' => $groupId,
+                    'user_id' => $user->id,
+                    'owner_id' => $groupOwner->user_id,
+                    'code' => $code
+                ];
+
+                JoinRequest::create($data);
+
+                $data = [
+                    'user' => $user,
+                    'recipient' => User::find($groupOwner->user_id),
+                    'group' => Group::find($groupId),
+                    'code' => $code,
+                ];
+
+                // dispatch email to group owner with unique code
+                Mail::queue('emails.groups.requestToJoin', $data, function ($message) use ($data) {
+
+                    $message->from($data['user']->email, $data['user']->first . ' ' . $data['user']->last);
+                    $message->to($data['recipient']->email);
+                    $message->subject('Visit List Join Request');
+
+                });
+
             }
 
-            return redirect()->back()->with('success', 'You have been added to the group!');
-
+            return redirect()->back()->with('success', 'Your request to join the group has been sent to the group owner!');
         }
 
         $groups = Group::where('groups.active', true)
@@ -227,6 +266,104 @@ class GroupsController extends Controller
         $user->groups()->detach($group->id);
 
         return redirect('/groups')->with('success', 'You have been removed from '.$group->name.'!');
+    }
+
+    public function share(Request $request, $groupId) {
+
+        $request->session()->flash('shareGroupCheckId', $groupId);
+
+        return view('groups.share', compact('groupId'));
+    }
+
+    public function sendShareEmails(Request $request, $groupId) {
+
+        // match session('shareGroupCheckId') with given $groupId
+        if (! $request->session()->get('shareGroupCheckId') == $groupId) {
+
+            // todo: redirect with error message
+            dd('Error! Group ID mismatch. Please try again.');
+        }
+
+        // todo: error message if group does not exit
+        $group = Group::findOrFail($groupId);
+
+        $user = Auth::user();
+
+        // get and/or create group code
+        if (($group->code == 'NULL') || ($group->code == NULL)) {
+
+            $shareCode = $this->uniqueCode();
+
+            $group->code = $shareCode;
+            $group->save();
+        }
+        else {
+            $shareCode = $group->code;
+        }
+
+        $data = [
+            'shareCode' => $shareCode,
+            'user' => $user,
+        ];
+
+        // send email to each recipient
+        foreach ($request->get('email') as $email) {
+
+            Mail::queue('emails.groups.share', $data, function ($message) use ($data, $email) {
+
+                $message->from($data['user']->email, $data['user']->first . ' ' . $data['user']->last);
+                $message->to($email);
+                $message->subject('Visit List Invite');
+
+            });
+
+        }
+
+        return redirect('/groups')->with('success', 'As email has been sent containing a link to subscribe to your visitation list!');
+    }
+
+    public function approveJoinRequest(Request $request, $code) {
+
+        $joinRequest = JoinRequest::where('code', $code)->first();
+
+        $user = User::find($joinRequest->user_id);
+
+        // do not attach if user already belongs to group
+        if ($user->groups()->find($joinRequest->group_id)) {
+            return redirect('/groups')->with('success', 'Request to join list has been approved!');
+        }
+
+        $user->groups()->attach($joinRequest->group_id);
+
+        $joinRequest->delete();
+
+        return redirect('/groups')->with('success', 'Request to join list has been approved!');
+    }
+
+    protected function uniqueCode() {
+
+        $code = str_random(12);
+
+        if (Group::where('code', $code)->count() < 1) {
+            return $code;
+        }
+        else {
+            return $this->uniqueCode();
+        }
+
+    }
+
+    protected function uniqueRequestCode() {
+
+        $code = str_random(20);
+
+        if (JoinRequest::where('code', $code)->count() < 1) {
+            return $code;
+        }
+        else {
+            return $this->uniqueRequestCode();
+        }
+
     }
 
 }
