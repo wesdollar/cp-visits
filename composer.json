@@ -13,7 +13,8 @@
         "algolia/algoliasearch-laravel": "^1.0",
         "barryvdh/laravel-cors": "^0.8.0",
         "tymon/jwt-auth": "^0.5.9",
-        "rap2hpoutre/laravel-log-viewer": "^0.6.1"
+        "rap2hpoutre/laravel-log-viewer": "^0.6.1",
+        "guzzlehttp/guzzle": "~5.3|~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
