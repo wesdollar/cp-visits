@@ -32,7 +32,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="{{ url('/marketing-landing') }}">Home</a></li>
+                <li><a href="{{ url('/marketing-landing') }}">Home</a></li>
                 @if (Auth::user())
                     <li><a href="{{ url('/visitees') }}">Visitees</a></li>
                     <li><a href="{{ url('/groups') }}">Groups</a></li>
