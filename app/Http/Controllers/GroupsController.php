@@ -197,7 +197,7 @@ class GroupsController extends Controller
 //        return Group::setSettings();
     }
 
-    public function joinGroup($groupId = null) {
+    public function joinGroup(Request $request, $groupId = null) {
 
         $user = Auth::user();
 
@@ -207,14 +207,36 @@ class GroupsController extends Controller
             // do not attach a second time
 
             if ($group = $user->groups()->find($groupId)) {
-                return redirect()->back()->with('success', 'You already belong to '.$group->name.'!');
+
+                $youAlreadyBelong = 'You already belong to '.$group->name.'!';
+
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => $youAlreadyBelong
+                    ], 304);
+                }
+
+                return redirect()->back()->with('success', $youAlreadyBelong);
             }
             else {
                 // $user->groups()->attach($groupId);
 
                 // find owner of group
-                // todo: error message
-                $groupOwner = GroupOwner::where('group_id', $groupId)->first();
+                if (! $groupOwner = GroupOwner::where('group_id', $groupId)->first()) {
+
+                    $noOwnerHere = 'The group you requested to join does not have an owner. Please try again.';
+
+                    if ($request->ajax()) {
+
+                        return response()->json([
+                            'success' => false,
+                            'message' => $noOwnerHere
+                        ], 304);
+                    }
+
+                    return redirect()->back()->with('error', $noOwnerHere);
+                }
 
                 // unique request code
                 $code = $this->uniqueRequestCode();
@@ -247,7 +269,31 @@ class GroupsController extends Controller
 
             }
 
-            return redirect()->back()->with('success', 'Your request to join the group has been sent to the group owner!');
+            $successMsg = 'Your request to join the group has been sent to the group owner!';
+
+            // return ajax results for API
+            if ($request->ajax()) {
+
+                $data = [
+                    'success' => true,
+                    'message' => $successMsg
+                ];
+
+                return response()->json($data);
+            }
+
+            return redirect()->back()->with('success', $successMsg);
+        }
+
+        // return error if no/invalid group
+        if ($request->ajax()) {
+            $data = [
+                'success' => false,
+                'status' => 400,
+                'message' => 'missing_invalid_list',
+            ];
+
+            return response()->json($data);
         }
 
         $groups = Group::where('groups.active', true)
