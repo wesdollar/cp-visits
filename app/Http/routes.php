@@ -32,7 +32,7 @@ Route::get('/forget-success', function() {
 Route::get('/invite/{code?}', 'SubscribeController@registerOrLogin');
 
 Route::get('/', function () {
-    return redirect('visitees');
+    return view('marketing.home');
 });
 
 Route::group(['middleware' => ['auth']], function() {
