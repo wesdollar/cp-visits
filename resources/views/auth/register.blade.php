@@ -7,6 +7,15 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Register</div>
                 <div class="panel-body">
+
+                    @if ($errors->has('registration_code'))
+                        <div class="alert alert-danger">
+                            <p>
+                                A valid registration code is required to use the Visit app. We are currently beta testing our app, but we will open up registration to the public very soon. Please try again on a later date.
+                            </p>
+                        </div>
+                    @endif
+
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {!! csrf_field() !!}
 
@@ -75,6 +84,20 @@
                                 @if ($errors->has('password_confirmation'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('password_confirmation') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('registration_code') ? ' has-error' : '' }}">
+                            <label class="col-md-4 control-label">Registration Code</label>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="registration_code">
+
+                                @if ($errors->has('registration_code'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('registration_code') }}</strong>
                                     </span>
                                 @endif
                             </div>
