@@ -323,15 +323,34 @@ class GroupsController extends Controller
 
     public function sendShareEmails(Request $request, $groupId) {
 
-        // match session('shareGroupCheckId') with given $groupId
-        if (! $request->session()->get('shareGroupCheckId') == $groupId) {
+        if (! $request->ajax()) {
+            // match session('shareGroupCheckId') with given $groupId
+            if (! $request->session()->get('shareGroupCheckId') == $groupId) {
 
-            // todo: redirect with error message
-            dd('Error! Group ID mismatch. Please try again.');
+                if ($request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'List IDs do not match!',
+                    ], 400);
+                }
+
+                // todo: redirect with error message
+                dd('Error! Group ID mismatch. Please try again.');
+            }
         }
 
-        // todo: error message if group does not exit
-        $group = Group::findOrFail($groupId);
+        if (! $group = Group::find($groupId)) {
+
+            if ($request->ajax()) {
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No lists found.'
+                ], 404);
+            }
+
+            return redirect()->back()->with('error', 'The list you were searching for was not found.');
+        }
 
         $user = Auth::user();
 
@@ -365,7 +384,17 @@ class GroupsController extends Controller
 
         }
 
-        return redirect('/groups')->with('success', 'As email has been sent containing a link to subscribe to your visitation list!');
+        $emailSentMsg = 'An email has been sent containing a link to subscribe to your visitation list!';
+
+        if ($request->ajax()) {
+
+            return response()->json([
+                'success' => true,
+                'message' => $emailSentMsg
+            ]);
+        }
+
+        return redirect('/groups')->with('success', $emailSentMsg);
     }
 
     public function approveJoinRequest(Request $request, $code) {

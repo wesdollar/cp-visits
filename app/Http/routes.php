@@ -110,6 +110,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
     Route::post('/groups/{id}/update', 'GroupsController@update');
     Route::get('/groups/{id}/delete', 'GroupsController@delete');
     Route::post('/groups/join/{id?}', 'GroupsController@joinGroup');
+    Route::post('/groups/{id}/share', 'GroupsController@sendShareEmails');
     Route::get('/visitees', ['uses' => 'VisiteesController@index']);
     Route::post('/visitees', ['uses' => 'VisiteesController@postVisitee']);
     Route::get('/visitees/{id}', 'VisiteesController@getVisitee');
