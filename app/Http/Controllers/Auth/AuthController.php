@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Group;
 use App\User;
 use Illuminate\Support\Facades\Auth;
+use Mail;
+use Session;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -63,12 +65,12 @@ class AuthController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param Request $request
      * @param  array  $data
+     * @param Request $request
      *
      * @return User
      */
-    protected function create(Request $request, array $data)
+    protected function create(array $data)
     {
         $user = User::create([
             'first' => $data['first'],
@@ -77,7 +79,15 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
 
-        $this->attachUserWithCodeToGroup($request, $user);
+        $this->attachUserWithCodeToGroup($user);
+
+        Mail::queue('emails.auth.welcome', $data, function($message) use ($data) {
+
+            $message->from('no-reply@visit123.org', 'Visit App');
+            $message->to($data['email']);
+            $message->subject('Welcome to Visit!');
+
+        });
 
         return $user;
     }
@@ -142,18 +152,22 @@ class AuthController extends Controller
      * @param Request $request
      * @param         $user
      */
-    protected function attachUserWithCodeToGroup(Request $request, $user) {
+    protected function attachUserWithCodeToGroup($user) {
 
-        if ($code = $request->session()->get('code')) {
+        if ($code = Session::get('code')) {
 
             if ($group = Group::where('code', $code)->first()) {
 
                 // only add relationship if it doesn't exist
                 if (! $user->groups->contains($group->id)) {
                     $user->groups()->attach($group);
+
+                    return true;
                 }
 
             }
         }
+
+        return false;
     }
 }

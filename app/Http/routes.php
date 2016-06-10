@@ -122,14 +122,6 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['cors', 'jwt.auth']], funct
     Route::put('/users/{id}', 'UsersController@putUpdate');
     Route::get('/destroy-token', 'UsersController@destroyToken');
 
-    // todo: remove after testing
-    Route::get('/verify-user', function() {
-
-        $user = JWTAuth::parseToken()->authenticate();
-
-        return response()->json(compact('user'));
-    });
-
 });
 
 Route::auth();
